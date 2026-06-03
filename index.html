@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عربي تك | الذكاء الاصطناعي للمبتدئين</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07080f;
+    --bg2: #0d0e1a;
+    --bg3: #13142200;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --accent3: #43e97b;
+    --text: #eeeef5;
+    --text2: #8888aa;
+    --card: #0f1020;
+    --border: #1e1f35;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Cairo',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+
+  /* BG EFFECTS */
+  .orb {
+    position:fixed; border-radius:50%; pointer-events:none; filter:blur(80px);
+  }
+  .orb1 { width:500px;height:500px; background:rgba(108,99,255,0.12); top:-150px;right:-150px; animation:float1 9s ease-in-out infinite alternate; }
+  .orb2 { width:400px;height:400px; background:rgba(255,101,132,0.09); bottom:-100px;left:-100px; animation:float2 11s ease-in-out infinite alternate; }
+  .orb3 { width:300px;height:300px; background:rgba(67,233,123,0.07); top:50%;left:50%; animation:float3 7s ease-in-out infinite alternate; }
+  @keyframes float1{to{transform:translate(60px,80px)}}
+  @keyframes float2{to{transform:translate(80px,-60px)}}
+  @keyframes float3{to{transform:translate(-40px,40px)}}
+
+  /* NAV */
+  nav {
+    position:fixed;top:0;width:100%;z-index:100;
+    background:rgba(7,8,15,0.8);backdrop-filter:blur(24px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner {
+    max-width:1100px;margin:0 auto;padding:0 20px;
+    display:flex;align-items:center;justify-content:space-between;height:64px;
+  }
+  .logo { display:flex;align-items:center;gap:10px;text-decoration:none; }
+  .logo-icon {
+    width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.1rem;font-weight:900;color:#fff;
+  }
+  .logo-text { font-size:1.3rem;font-weight:900;color:var(--text); }
+  .logo-text span { color:var(--accent); }
+  .nav-links { display:flex;gap:28px;list-style:none; }
+  .nav-links a { color:var(--text2);text-decoration:none;font-size:0.88rem;font-weight:600;transition:color .2s; }
+  .nav-links a:hover { color:var(--accent); }
+  .nav-btn {
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:0.85rem;
+    padding:8px 20px;border-radius:22px;border:none;cursor:pointer;
+    transition:opacity .2s,transform .2s;
+  }
+  .nav-btn:hover{opacity:.9;transform:translateY(-1px)}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;display:block;}
+
+  /* MOBILE NAV */
+  .mobile-menu {
+    display:none;position:fixed;top:64px;inset-x:0;z-index:99;
+    background:rgba(7,8,15,0.97);backdrop-filter:blur(24px);
+    border-bottom:1px solid var(--border);padding:20px;
+    flex-direction:column;gap:16px;
+  }
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{color:var(--text2);text-decoration:none;font-size:1rem;font-weight:600;padding:8px 0;border-bottom:1px solid var(--border);}
+
+  /* HERO */
+  .hero {
+    min-height:100vh;display:flex;align-items:center;
+    padding:100px 20px 60px;position:relative;
+  }
+  .hero-inner{max-width:1100px;margin:0 auto;width:100%;}
+  .hero-badge {
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(108,99,255,0.1);border:1px solid rgba(108,99,255,0.25);
+    color:var(--accent);font-size:0.8rem;font-weight:700;
+    padding:7px 16px;border-radius:24px;margin-bottom:30px;
+    animation:fadeUp .6s ease both;
+  }
+  .badge-dot{width:7px;height:7px;background:var(--accent3);border-radius:50%;animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.6}}
+
+  .hero h1 {
+    font-size:clamp(2rem,7vw,4.2rem);font-weight:900;line-height:1.15;
+    margin-bottom:22px;animation:fadeUp .6s .1s ease both;
+  }
+  .hero h1 .plain{display:block;color:var(--text);}
+  .hero h1 .grad{
+    display:block;
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 60%,var(--accent3) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .hero-sub {
+    font-family:'Tajawal',sans-serif;font-size:1.05rem;font-weight:400;
+    color:var(--text2);line-height:1.85;max-width:580px;margin-bottom:36px;
+    animation:fadeUp .6s .2s ease both;
+  }
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp .6s .3s ease both;}
+  .btn-main {
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:0.95rem;
+    padding:14px 30px;border-radius:14px;border:none;cursor:pointer;
+    box-shadow:0 8px 32px rgba(108,99,255,0.3);transition:transform .2s,box-shadow .2s;
+  }
+  .btn-main:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(108,99,255,0.45);}
+  .btn-ghost {
+    background:transparent;border:1px solid var(--border);
+    color:var(--text);font-family:'Cairo',sans-serif;font-weight:600;font-size:0.95rem;
+    padding:14px 30px;border-radius:14px;cursor:pointer;
+    transition:border-color .2s,background .2s;
+  }
+  .btn-ghost:hover{border-color:var(--accent);background:rgba(108,99,255,0.07);}
+
+  .hero-nums{display:flex;gap:44px;margin-top:56px;animation:fadeUp .6s .4s ease both;flex-wrap:wrap;}
+  .num-item{}
+  .num-val{font-size:1.9rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .num-label{font-size:0.78rem;color:var(--text2);margin-top:3px;}
+
+  /* SCROLL TICKER */
+  .ticker-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;padding:14px 0;}
+  .ticker-track{display:flex;width:max-content;animation:scroll 22s linear infinite;gap:0;}
+  .ticker-item{display:flex;align-items:center;gap:10px;padding:0 40px;color:var(--text2);font-size:0.82rem;white-space:nowrap;border-right:1px solid var(--border);}
+  .ticker-item b{color:var(--accent);}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* SECTIONS */
+  .sec{padding:80px 20px;}
+  .sec-inner{max-width:1100px;margin:0 auto;}
+  .sec-label{color:var(--accent);font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+  .sec-title{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;line-height:1.25;margin-bottom:40px;}
+  .sec-title em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+  /* FEATURED */
+  .feat-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;}
+  .feat-side{display:flex;flex-direction:column;gap:22px;}
+
+  /* CARDS */
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:18px;
+    overflow:hidden;display:block;text-decoration:none;color:inherit;
+    transition:transform .3s,border-color .3s,box-shadow .3s;cursor:pointer;
+  }
+  .card:hover{transform:translateY(-5px);border-color:rgba(108,99,255,.35);box-shadow:0 24px 60px rgba(0,0,0,.5);}
+  .card-thumb{
+    width:100%;display:flex;align-items:center;justify-content:center;
+    font-size:3rem;position:relative;overflow:hidden;
+  }
+  .card-thumb::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(to bottom,transparent 40%,var(--card));
+  }
+  .big-thumb{aspect-ratio:16/9;font-size:4.5rem;}
+  .sm-thumb{aspect-ratio:16/7;font-size:2.5rem;}
+  .card-body{padding:20px;}
+  .card-tag{
+    display:inline-block;font-size:0.7rem;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;
+    padding:4px 10px;border-radius:20px;
+  }
+  .tag-ai{background:rgba(108,99,255,.15);color:var(--accent);}
+  .tag-tool{background:rgba(67,233,123,.15);color:var(--accent3);}
+  .tag-earn{background:rgba(255,101,132,.15);color:var(--accent2);}
+  .tag-news{background:rgba(255,179,0,.15);color:#ffb300;}
+  .card-title{font-size:1rem;font-weight:700;line-height:1.55;margin-bottom:10px;}
+  .big-title{font-size:1.3rem;}
+  .card-desc{font-family:'Tajawal',sans-serif;font-size:0.85rem;color:var(--text2);line-height:1.75;margin-bottom:16px;}
+  .card-foot{display:flex;align-items:center;gap:10px;font-size:0.75rem;color:var(--text2);}
+  .card-foot-dot{width:3px;height:3px;border-radius:50%;background:var(--border);}
+  .read-min{color:var(--accent3);font-weight:600;}
+
+  /* BG THUMBS */
+  .bg-ai{background:linear-gradient(135deg,#0d0830,#160d50);}
+  .bg-tool{background:linear-gradient(135deg,#081a10,#0d2a18);}
+  .bg-earn{background:linear-gradient(135deg,#1a0820,#280d30);}
+  .bg-news{background:linear-gradient(135deg,#1a1200,#2a1d00);}
+  .bg-chat{background:linear-gradient(135deg,#0a1520,#0f2030);}
+  .bg-img{background:linear-gradient(135deg,#1a0a0a,#2a1010);}
+
+  /* GRID 3 */
+  .grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;}
+
+  /* CATS */
+  .cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
+  .cat-box{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:22px 16px;text-align:center;text-decoration:none;color:inherit;
+    transition:transform .2s,border-color .2s,box-shadow .2s;display:block;
+  }
+  .cat-box:hover{transform:translateY(-3px);border-color:rgba(108,99,255,.3);box-shadow:0 10px 30px rgba(0,0,0,.4);}
+  .cat-emoji{font-size:2.2rem;margin-bottom:10px;}
+  .cat-name{font-size:0.88rem;font-weight:700;margin-bottom:4px;}
+  .cat-n{font-size:0.73rem;color:var(--text2);}
+
+  /* NEWSLETTER */
+  .nl-wrap{
+    background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+    padding:80px 20px;text-align:center;position:relative;overflow:hidden;
+  }
+  .nl-wrap::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 50% 100%,rgba(108,99,255,0.08),transparent 70%);
+  }
+  .nl-inner{max-width:480px;margin:0 auto;position:relative;}
+  .nl-icon{font-size:2.5rem;margin-bottom:16px;}
+  .nl-title{font-size:1.7rem;font-weight:900;margin-bottom:10px;}
+  .nl-sub{font-family:'Tajawal',sans-serif;color:var(--text2);margin-bottom:28px;line-height:1.7;}
+  .nl-form{display:flex;gap:10px;}
+  .nl-input{
+    flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);
+    color:var(--text);padding:13px 16px;border-radius:12px;
+    font-family:'Cairo',sans-serif;font-size:0.88rem;outline:none;
+    transition:border-color .2s;direction:rtl;
+  }
+  .nl-input:focus{border-color:var(--accent);}
+  .nl-input::placeholder{color:var(--text2);}
+  .nl-btn{
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff;font-family:'Cairo',sans-serif;font-weight:700;font-size:0.88rem;
+    padding:13px 22px;border-radius:12px;border:none;cursor:pointer;white-space:nowrap;
+    transition:opacity .2s;
+  }
+  .nl-btn:hover{opacity:.88;}
+
+  /* FOOTER */
+  footer{background:var(--bg2);border-top:1px solid var(--border);padding:56px 20px 28px;}
+  .foot-inner{max-width:1100px;margin:0 auto;}
+  .foot-top{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+  .foot-about .logo-text{font-size:1.2rem;font-weight:900;display:block;margin-bottom:14px;}
+  .foot-about p{font-family:'Tajawal',sans-serif;font-size:0.85rem;color:var(--text2);line-height:1.8;}
+  .foot-col h5{font-size:0.83rem;font-weight:700;margin-bottom:16px;color:var(--text);}
+  .foot-col ul{list-style:none;}
+  .foot-col ul li{margin-bottom:10px;}
+  .foot-col ul li a{color:var(--text2);text-decoration:none;font-size:0.83rem;transition:color .2s;}
+  .foot-col ul li a:hover{color:var(--accent);}
+  .foot-bottom{border-top:1px solid var(--border);padding-top:22px;display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;color:var(--text2);flex-wrap:wrap;gap:14px;}
+  .socials{display:flex;gap:10px;}
+  .soc{
+    width:36px;height:36px;border-radius:9px;
+    background:rgba(255,255,255,0.04);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-size:0.9rem;
+    text-decoration:none;transition:border-color .2s,background .2s;
+  }
+  .soc:hover{border-color:var(--accent);background:rgba(108,99,255,0.1);}
+
+  /* ANIMATE */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+  .fi{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease;}
+  .fi.show{opacity:1;transform:translateY(0);}
+
+  /* MOBILE */
+  @media(max-width:768px){
+    .nav-links,.nav-btn{display:none;}
+    .hamburger{display:flex;}
+    .feat-grid{grid-template-columns:1fr;}
+    .feat-side{flex-direction:row;}
+    .foot-top{grid-template-columns:1fr;gap:28px;}
+    .foot-bottom{flex-direction:column;text-align:center;}
+    .nl-form{flex-direction:column;}
+  }
+  @media(max-width:520px){
+    .feat-side{flex-direction:column;}
+    .cats-grid{grid-template-columns:repeat(2,1fr);}
+    .hero-nums{gap:24px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">ع</div>
+      <div class="logo-text">عربي <span>تك</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">الرئيسية</a></li>
+      <li><a href="#">الذكاء الاصطناعي</a></li>
+      <li><a href="#">أدوات مجانية</a></li>
+      <li><a href="#">ربح من الإنترنت</a></li>
+      <li><a href="#">عن الموقع</a></li>
+    </ul>
+    <button class="nav-btn">اشترك مجاناً 🎁</button>
+    <button class="hamburger" onclick="toggleNav()" aria-label="قائمة">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#">🏠 الرئيسية</a>
+  <a href="#">🤖 الذكاء الاصطناعي</a>
+  <a href="#">🛠️ أدوات مجانية</a>
+  <a href="#">💰 ربح من الإنترنت</a>
+  <a href="#">👤 عن الموقع</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      أكبر مرجع عربي للذكاء الاصطناعي
+    </div>
+    <h1>
+      <span class="plain">الذكاء الاصطناعي</span>
+      <span class="grad">للمبتدئين بالعربي</span>
+    </h1>
+    <p class="hero-sub">
+      مش لازم تكون متخصصاً أو تعرف برمجة — هنشرح ليك كل أدوات الذكاء الاصطناعي بطريقة سهلة وعملية تقدر تستخدمها فوراً وتكسب منها.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-main">🚀 ابدأ من هنا</button>
+      <button class="btn-ghost">📧 اشترك في النشرة</button>
+    </div>
+    <div class="hero-nums">
+      <div class="num-item">
+        <div class="num-val">+200</div>
+        <div class="num-label">شرح وتقييم لأدوات AI</div>
+      </div>
+      <div class="num-item">
+        <div class="num-val">+30K</div>
+        <div class="num-label">قارئ شهرياً</div>
+      </div>
+      <div class="num-item">
+        <div class="num-val">مجاني</div>
+        <div class="num-label">100% بدون رسوم</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track">
+    <div class="ticker-item">🤖 <b>ChatGPT</b> — شرح كامل للمبتدئين</div>
+    <div class="ticker-item">🎨 <b>Midjourney</b> — اعمل صور بالذكاء الاصطناعي</div>
+    <div class="ticker-item">💬 <b>Claude</b> — أفضل نموذج للكتابة بالعربي</div>
+    <div class="ticker-item">🎵 <b>Suno AI</b> — اعمل موسيقى من الصفر</div>
+    <div class="ticker-item">💰 <b>كيف تربح</b> من أدوات الذكاء الاصطناعي</div>
+    <div class="ticker-item">🤖 <b>ChatGPT</b> — شرح كامل للمبتدئين</div>
+    <div class="ticker-item">🎨 <b>Midjourney</b> — اعمل صور بالذكاء الاصطناعي</div>
+    <div class="ticker-item">💬 <b>Claude</b> — أفضل نموذج للكتابة بالعربي</div>
+    <div class="ticker-item">🎵 <b>Suno AI</b> — اعمل موسيقى من الصفر</div>
+    <div class="ticker-item">💰 <b>كيف تربح</b> من أدوات الذكاء الاصطناعي</div>
+  </div>
+</div>
+
+<!-- FEATURED -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="fi">
+      <div class="sec-label">⭐ مميز</div>
+      <div class="sec-title">أبرز <em>المقالات</em></div>
+    </div>
+    <div class="feat-grid">
+      <a href="#" class="card fi">
+        <div class="card-thumb big-thumb bg-ai">🤖</div>
+        <div class="card-body">
+          <span class="card-tag tag-ai">🤖 ذكاء اصطناعي</span>
+          <div class="card-title big-title">ChatGPT للمبتدئين — كل اللي محتاج تعرفه في 2026</div>
+          <div class="card-desc">دليل شامل لاستخدام ChatGPT من الصفر — من إنشاء الحساب للاستخدام الاحترافي اللي هيوفرلك ساعات من وقتك كل يوم.</div>
+          <div class="card-foot">
+            <span>عربي تك</span>
+            <span class="card-foot-dot"></span>
+            <span class="read-min">⏱ 10 دقائق</span>
+            <span class="card-foot-dot"></span>
+            <span>أمس</span>
+          </div>
+        </div>
+      </a>
+      <div class="feat-side">
+        <a href="#" class="card fi">
+          <div class="card-thumb sm-thumb bg-earn">💰</div>
+          <div class="card-body">
+            <span class="card-tag tag-earn">💰 ربح</span>
+            <div class="card-title">5 طرق تربح من الذكاء الاصطناعي بدون خبرة</div>
+            <div class="card-foot">
+              <span class="read-min">⏱ 7 دقائق</span>
+              <span class="card-foot-dot"></span>
+              <span>منذ يومين</span>
+            </div>
+          </div>
+        </a>
+        <a href="#" class="card fi">
+          <div class="card-thumb sm-thumb bg-tool">🛠️</div>
+          <div class="card-body">
+            <span class="card-tag tag-tool">🛠️ أدوات</span>
+            <div class="card-title">أفضل 10 أدوات AI مجانية تستخدمها دلوقتي</div>
+            <div class="card-foot">
+              <span class="read-min">⏱ 6 دقائق</span>
+              <span class="card-foot-dot"></span>
+              <span>منذ 3 أيام</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATS -->
+<section class="sec" style="padding-top:0">
+  <div class="sec-inner">
+    <div class="fi">
+      <div class="sec-label">📂 تصفح</div>
+      <div class="sec-title">الأقسام <em>الرئيسية</em></div>
+    </div>
+    <div class="cats-grid">
+      <a href="#" class="cat-box fi"><div class="cat-emoji">🤖</div><div class="cat-name">ChatGPT</div><div class="cat-n">48 مقال</div></a>
+      <a href="#" class="cat-box fi"><div class="cat-emoji">🎨</div><div class="cat-name">توليد الصور</div><div class="cat-n">35 مقال</div></a>
+      <a href="#" class="cat-box fi"><div class="cat-emoji">✍️</div><div class="cat-name">كتابة المحتوى</div><div class="cat-n">41 مقال</div></a>
+      <a href="#" class="cat-box fi"><div class="cat-emoji">🎵</div><div class="cat-name">الموسيقى والصوت</div><div class="cat-n">22 مقال</div></a>
+      <a href="#" class="cat-box fi"><div class="cat-emoji">🎬</div><div class="cat-name">الفيديو</div><div class="cat-n">18 مقال</div></a>
+      <a href="#" class="cat-box fi"><div class="cat-emoji">💰</div><div class="cat-name">الربح من AI</div><div class="cat-n">30 مقال</div></a>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST -->
+<section class="sec" style="padding-top:0">
+  <div class="sec-inner">
+    <div class="fi">
+      <div class="sec-label">🔥 الأحدث</div>
+      <div class="sec-title">مقالات <em>جديدة</em></div>
+    </div>
+    <div class="grid3">
+      <a href="#" class="card fi">
+        <div class="card-thumb sm-thumb bg-chat">💬</div>
+        <div class="card-body">
+          <span class="card-tag tag-ai">🤖 ذكاء اصطناعي</span>
+          <div class="card-title">Claude vs ChatGPT — أيهم أفضل للكتابة بالعربي؟</div>
+          <div class="card-desc">مقارنة عملية بين النموذجين مع أمثلة حقيقية باللغة العربية.</div>
+          <div class="card-foot"><span class="read-min">⏱ 8 دقائق</span><span class="card-foot-dot"></span><span>اليوم</span></div>
+        </div>
+      </a>
+      <a href="#" class="card fi">
+        <div class="card-thumb sm-thumb bg-img">🎨</div>
+        <div class="card-body">
+          <span class="card-tag tag-tool">🛠️ أدوات</span>
+          <div class="card-title">Midjourney للمبتدئين — اعمل صور خيالية في دقيقتين</div>
+          <div class="card-desc">شرح مبسط خطوة بخطوة لإنشاء صور احترافية بالذكاء الاصطناعي.</div>
+          <div class="card-foot"><span class="read-min">⏱ 6 دقائق</span><span class="card-foot-dot"></span><span>أمس</span></div>
+        </div>
+      </a>
+      <a href="#" class="card fi">
+        <div class="card-thumb sm-thumb bg-earn">💰</div>
+        <div class="card-body">
+          <span class="card-tag tag-earn">💰 ربح</span>
+          <div class="card-title">كيف تبيع محتوى مكتوب بـ AI على الإنترنت</div>
+          <div class="card-desc">طرق عملية لتحويل أدوات الذكاء الاصطناعي لمصدر دخل حقيقي.</div>
+          <div class="card-foot"><span class="read-min">⏱ 9 دقائق</span><span class="card-foot-dot"></span><span>منذ يومين</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="nl-wrap">
+  <div class="nl-inner fi">
+    <div class="nl-icon">📬</div>
+    <div class="nl-title">خليك دايماً في الصورة</div>
+    <p class="nl-sub">اشترك وهيوصلك كل جديد في الذكاء الاصطناعي كل أسبوع — بالعربي وبدون تعقيد.</p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="بريدك الإلكتروني...">
+      <button class="nl-btn">اشترك 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-top">
+      <div class="foot-about">
+        <span class="logo-text">عربي <span style="color:var(--accent)">تك</span></span>
+        <p>موقع متخصص في شرح الذكاء الاصطناعي للمبتدئين بالعربي — هدفنا نوصّل التقنية لكل عربي بطريقة سهلة وعملية.</p>
+      </div>
+      <div class="foot-col">
+        <h5>الأقسام</h5>
+        <ul>
+          <li><a href="#">ChatGPT</a></li>
+          <li><a href="#">توليد الصور</a></li>
+          <li><a href="#">كتابة المحتوى</a></li>
+          <li><a href="#">الربح من AI</a></li>
+          <li><a href="#">أدوات مجانية</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h5>الموقع</h5>
+        <ul>
+          <li><a href="#">من نحن</a></li>
+          <li><a href="#">اتصل بنا</a></li>
+          <li><a href="#">أعلن معنا</a></li>
+          <li><a href="#">سياسة الخصوصية</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 عربي تك — جميع الحقوق محفوظة</span>
+      <div class="socials">
+        <a href="#" class="soc">𝕏</a>
+        <a href="#" class="soc">▶</a>
+        <a href="#" class="soc">📷</a>
+        <a href="#" class="soc">in</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('show'), i * 90);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+
+  // Mobile nav
+  function toggleNav() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Newsletter
+  document.querySelector('.nl-btn').addEventListener('click', () => {
+    const input = document.querySelector('.nl-input');
+    if (input.value.includes('@')) {
+      input.value = '';
+      input.placeholder = '✅ تم الاشتراك بنجاح!';
+      setTimeout(() => input.placeholder = 'بريدك الإلكتروني...', 3000);
+    } else {
+      input.style.borderColor = 'var(--accent2)';
+      setTimeout(() => input.style.borderColor = 'var(--border)', 2000);
+    }
+  });
+</script>
+</body>
+</html>
